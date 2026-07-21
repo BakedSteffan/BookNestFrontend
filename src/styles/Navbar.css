@@ -1,0 +1,37 @@
+﻿.navbar-booknest {
+    background-color: var(--primary-color);
+    padding: 14px 0;
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+    .nav-link:hover {
+        color: var(--accent-color) !important;
+    }
+
+.login-btn {
+    border: 2px solid white;
+    color: white;
+}
+
+    .login-btn:hover {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: black;
+    }
+
+.navbar-username {
+    color: var(--accent-color);
+}

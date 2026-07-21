@@ -1,0 +1,23 @@
+﻿.books-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+    .books-header h1 {
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+
+.search-box {
+    max-width: 700px;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.category-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+}

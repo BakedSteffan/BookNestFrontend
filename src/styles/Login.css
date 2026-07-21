@@ -1,0 +1,21 @@
+.card {
+	border-radius: 20px;
+}
+
+.form-control {
+	border-radius: 10px;
+	padding: 12px;
+}
+
+	.form-control:focus {
+		border-color: #8B5E3C;
+		box-shadow: 0 0 0 .2rem rgba(139,94,60,.15);
+	}
+
+.btn:hover {
+	background-color: #8B5E3C !important;
+}
+
+body {
+	background: #F8F5F2;
+}

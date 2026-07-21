@@ -1,0 +1,59 @@
+﻿import { Link } from 'react-router-dom';
+import '../styles/Hero.css';
+//import heroImage from "../assets/images/hero.png";
+
+function Hero() {
+    return (
+        <section className="hero">
+
+            <div className="container">
+
+                <div className="row align-items-center">
+
+                    {/* Left Side */}
+                    <div className="col-lg-6">
+
+                        <span className="hero-badge">
+                            📚 Welcome to BookNest
+                        </span>
+
+                        <h1 className="hero-title">
+                            Your Digital Library,
+                            <br />
+                            Simplified.
+                        </h1>
+
+                        <p className="hero-description">
+                            Discover thousands of books, borrow with ease,
+                            and enjoy a modern library experience designed
+                            for students and librarians.
+                        </p>
+
+                        <Link
+                            to="/books"
+                            className="btn btn-booknest btn-lg"
+                        >
+                            Browse Books
+                        </Link>
+
+                    </div>
+
+                    {/* Right Side */}
+
+                    <div className="col-lg-6 text-center">
+
+                        <div className="hero-image-placeholder">
+                            Hero Image
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    );
+}
+
+export default Hero;

@@ -1,0 +1,11 @@
+import api from "./api";
+
+export async function getBooks() {
+    const response = await api.get("/Books");
+    return response.data;
+}
+
+export async function getBookById(id) {
+    const response = await api.get(`/Books/${id}`);
+    return response.data;
+}
