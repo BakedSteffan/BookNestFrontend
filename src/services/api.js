@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://localhost:7174/api",
+    baseURL: "http://booknestsystem.runasp.net/api",
     headers: {
         "Content-Type": "application/json"
     }
