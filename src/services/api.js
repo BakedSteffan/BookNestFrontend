@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://booknestsystem.runasp.net/api",
+    baseURL: import.meta.env.VITE_API_BASE_URL ?? "https://booknestsystem.runasp.net/api", 
     headers: {
         "Content-Type": "application/json"
     }
 });
-
+-
 api.interceptors.request.use((config) => {
 
     const token = localStorage.getItem("token");
