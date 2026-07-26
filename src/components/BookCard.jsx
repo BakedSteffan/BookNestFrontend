@@ -17,9 +17,13 @@ function BookCard({
             <div className="card h-100 shadow-sm border-0">
 
                 <img
-                    src={image}
+                    src={image || "/default-book.png"}
                     className="card-img-top"
                     alt={title}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/default-book.png";
+                    }}
                 />
 
                 <div className="card-body d-flex flex-column">

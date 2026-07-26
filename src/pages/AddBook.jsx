@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createBook } from "../services/bookService";
 
 function AddBook() {
@@ -41,7 +41,15 @@ function AddBook() {
     return (
         <div className="container my-5">
 
-            <h2 className="mb-4">
+            <Link
+                to="/books"
+                className="btn btn-outline-secondary mb-3"
+            >
+                <i className="bi bi-arrow-left me-2"></i>
+                Back to Books
+            </Link>
+
+            <h2 className="fw-bold mb-4">
                 Add New Book
             </h2>
 
@@ -113,9 +121,23 @@ function AddBook() {
                     />
                 </div>
 
-                <button className="btn btn-primary">
-                    Add Book
-                </button>
+                <div className="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                    >
+                        Add Book
+                    </button>
+
+                    <Link
+                        to="/books"
+                        className="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </Link>
+
+                </div>
 
             </form>
 
