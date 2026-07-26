@@ -30,3 +30,7 @@ export async function returnBorrowRequest(id) {
     return response.data;
 }
 
+export async function getBorrowHistory() {
+    const response = await api.get("/BorrowHistory");
+    return response.data;
+}

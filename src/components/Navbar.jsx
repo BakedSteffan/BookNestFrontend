@@ -61,14 +61,25 @@ function Navbar() {
                         )}
 
                         {role === "Admin" && (
-                            <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/admin/borrow-requests"
-                                >
-                                    Admin Requests
-                                </Link>
-                            </li>
+                            <>
+                                <li className="nav-item">
+                                    <Link
+                                        className="nav-link"
+                                        to="/admin/borrow-requests"
+                                    >
+                                        Admin Requests
+                                    </Link>
+                                </li>
+
+                                <li className="nav-item">
+                                    <Link
+                                        className="nav-link"
+                                        to="/borrow-history"
+                                    >
+                                        Borrow History
+                                    </Link>
+                                </li>
+                            </>
                         )}
 
                     </ul>
