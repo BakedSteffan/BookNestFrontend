@@ -7,7 +7,9 @@ function BookCard({
     category,
     year,
     image,
-    isAvailable
+    isAvailable,
+    isAdmin,
+    onDelete
 }) {
     return (
         <div className="col-lg-4 col-md-6 mb-4">
@@ -47,12 +49,25 @@ function BookCard({
                         {isAvailable ? "Available" : "Borrowed"}
                     </span>
 
-                    <Link
-                        to={`/books/${id}`}
-                        className="btn btn-outline-dark mt-auto"
-                    >
-                        View Details
-                    </Link>
+                    <div className="d-grid gap-2 mt-auto">
+
+                        <Link
+                            to={`/books/${id}`}
+                            className="btn btn-outline-dark"
+                        >
+                            View Details
+                        </Link>
+
+                        {isAdmin && (
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => onDelete(id)}
+                            >
+                                Delete Book
+                            </button>
+                        )}
+
+                    </div>
 
                 </div>
 

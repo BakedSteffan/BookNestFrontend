@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getBooks } from "../services/bookService";
+import { getBooks, deleteBook } from "../services/bookService";
 import "../styles/Books.css";
 import BookCard from "../components/BookCard";
 
@@ -26,6 +26,40 @@ function Books() {
 
         fetchBooks();
     }, []);
+
+    async function handleDelete(id) {
+
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this book?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            await deleteBook(id);
+
+            setBooks(currentBooks =>
+                currentBooks.filter(book => book.id !== id)
+            );
+
+            alert("Book deleted successfully!");
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data ||
+                "Failed to delete book."
+            );
+
+        }
+
+    }
 
     const categories = [...new Set(books.map(book => book.category))];
 
@@ -123,6 +157,8 @@ function Books() {
                         year={book.publicationYear}
                         image={book.coverImageUrl}
                         isAvailable={book.isAvailable}
+                        isAdmin={role === "Admin"}
+                        onDelete={handleDelete}
                     />
 
                 ))}
