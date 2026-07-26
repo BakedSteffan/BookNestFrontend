@@ -12,6 +12,7 @@ import BookDetails from "./pages/BookDetails";
 import BorrowBook from "./pages/BorrowBook";
 import AdminBorrowRequests from "./pages/AdminBorrowRequests";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AddBook from "./pages/AddBook";
 
 function App() {
     return (
@@ -83,6 +84,15 @@ function App() {
         element={
             <ProtectedRoute adminOnly={true}>
                 <AdminBorrowRequests />
+            </ProtectedRoute>
+        }
+    />
+
+    <Route
+        path="/books/add"
+        element={
+            <ProtectedRoute roles={["Admin"]}>
+                <AddBook />
             </ProtectedRoute>
         }
     />

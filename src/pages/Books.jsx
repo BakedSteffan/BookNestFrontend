@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getBooks } from "../services/bookService";
 import "../styles/Books.css";
 import BookCard from "../components/BookCard";
@@ -8,6 +9,8 @@ function Books() {
     const [books, setBooks] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
+
+    const role = localStorage.getItem("role");
 
     useEffect(() => {
         async function fetchBooks() {
@@ -46,11 +49,27 @@ function Books() {
 
             <div className="books-header">
 
-                <h1>Browse Books</h1>
+                <div className="d-flex justify-content-between align-items-center">
 
-                <p>
-                    Discover your next favorite book.
-                </p>
+                    <div>
+                        <h1>Browse Books</h1>
+
+                        <p>
+                            Discover your next favorite book.
+                        </p>
+                    </div>
+
+                    {role === "Admin" && (
+                        <Link
+                            to="/books/add"
+                            className="btn btn-success"
+                        >
+                            <i className="bi bi-plus-circle me-2"></i>
+                            Add Book
+                        </Link>
+                    )}
+
+                </div>
 
             </div>
 
