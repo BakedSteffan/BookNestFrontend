@@ -15,6 +15,11 @@ export async function createBook(book) {
     return response.data;
 }
 
+export async function updateBook(id, book) {
+    const response = await api.put(`/Books/${id}`, book);
+    return response.data;
+}
+
 export async function deleteBook(id) {
     const response = await api.delete(`/Books/${id}`);
     return response.data;

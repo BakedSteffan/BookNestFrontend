@@ -63,12 +63,21 @@ function BookCard({
                         </Link>
 
                         {isAdmin && (
-                            <button
-                                className="btn btn-danger"
-                                onClick={() => onDelete(id)}
-                            >
-                                Delete Book
-                            </button>
+                            <>
+                                <Link
+                                    to={`/books/edit/${id}`}
+                                    className="btn btn-warning"
+                                >
+                                    Edit Book
+                                </Link>
+
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => onDelete(id)}
+                                >
+                                    Delete Book
+                                </button>
+                            </>
                         )}
 
                     </div>
