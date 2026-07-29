@@ -1,22 +1,190 @@
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getBookById, updateBook } from "../services/bookService";
 
 function EditBook() {
 
     const { id } = useParams();
+    const navigate = useNavigate();
+
+    const [book, setBook] = useState({
+        id: id,
+        title: "",
+        author: "",
+        isbn: "",
+        category: "",
+        publicationYear: "",
+        coverImageUrl: "",
+        isAvailable: true
+    });
+
+    useEffect(() => {
+
+        async function fetchBook() {
+
+            try {
+
+                const data = await getBookById(id);
+
+                setBook(data);
+
+            }
+            catch (error) {
+
+                console.error(error);
+                alert("Failed to load book.");
+
+            }
+
+        }
+
+        fetchBook();
+
+    }, [id]);
+
+    function handleChange(e) {
+
+        setBook({
+            ...book,
+            [e.target.name]: e.target.value
+        });
+
+    }
+
+    async function handleSubmit(e) {
+
+        e.preventDefault();
+
+        try {
+
+            await updateBook(id, book);
+
+            alert("Book updated successfully!");
+
+            navigate("/books");
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data ||
+                "Failed to update book."
+            );
+
+        }
+
+    }
 
     return (
+
         <div className="container my-5">
 
-            <h2 className="fw-bold">
+            <Link
+                to="/books"
+                className="btn btn-outline-secondary mb-3"
+            >
+                <i className="bi bi-arrow-left me-2"></i>
+                Back to Books
+            </Link>
+
+            <h2 className="fw-bold mb-4">
                 Edit Book
             </h2>
 
-            <p>
-                Editing book with ID: <strong>{id}</strong>
-            </p>
+            <form onSubmit={handleSubmit}>
+
+                <div className="mb-3">
+                    <label className="form-label">Title</label>
+                    <input
+                        className="form-control"
+                        name="title"
+                        value={book.title}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Author</label>
+                    <input
+                        className="form-control"
+                        name="author"
+                        value={book.author}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">ISBN</label>
+                    <input
+                        className="form-control"
+                        name="isbn"
+                        value={book.isbn}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Category</label>
+                    <input
+                        className="form-control"
+                        name="category"
+                        value={book.category}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Publication Year</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        name="publicationYear"
+                        value={book.publicationYear}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label className="form-label">Cover Image URL</label>
+                    <input
+                        className="form-control"
+                        name="coverImageUrl"
+                        value={book.coverImageUrl ?? ""}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                    >
+                        Save Changes
+                    </button>
+
+                    <Link
+                        to="/books"
+                        className="btn btn-outline-secondary"
+                    >
+                        Cancel
+                    </Link>
+
+                </div>
+
+            </form>
 
         </div>
+
     );
+
 }
 
 export default EditBook;
