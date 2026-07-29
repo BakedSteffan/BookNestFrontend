@@ -1,25 +1,48 @@
 import { useEffect, useState } from "react";
 import { getBorrowHistory } from "../services/borrowService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function BorrowHistory() {
 
     const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+
         async function loadHistory() {
+
             try {
+
                 const data = await getBorrowHistory();
+
                 setHistory(data);
+
             }
             catch (error) {
+
                 console.error(error);
+
             }
+            finally {
+
+                setLoading(false);
+
+            }
+
         }
 
         loadHistory();
+
     }, []);
 
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading borrow history..." />
+        );
+    }
+
     return (
+
         <div className="container my-5">
 
             <h2 className="mb-4">
@@ -69,6 +92,7 @@ function BorrowHistory() {
             </table>
 
         </div>
+
     );
 }
 

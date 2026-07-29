@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBookById } from "../services/bookService";
 import { createBorrowRequest } from "../services/borrowService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function BorrowBook() {
 
@@ -9,18 +10,31 @@ function BorrowBook() {
     const navigate = useNavigate();
 
     const [book, setBook] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [expectedReturnDate, setExpectedReturnDate] = useState("");
 
     useEffect(() => {
 
         async function fetchBook() {
+
             try {
+
                 const data = await getBookById(id);
+
                 setBook(data);
+
             }
             catch (error) {
+
                 console.error(error);
+
             }
+            finally {
+
+                setLoading(false);
+
+            }
+
         }
 
         fetchBook();
@@ -57,11 +71,14 @@ function BorrowBook() {
 
     };
 
-    if (!book) {
-        return <h2>Loading...</h2>;
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading book..." />
+        );
     }
 
     return (
+
         <div className="container my-5">
 
             <div className="row">
@@ -69,9 +86,13 @@ function BorrowBook() {
                 <div className="col-md-4">
 
                     <img
-                        src={book.coverImageUrl}
+                        src={book.coverImageUrl || "/default-book.png"}
                         alt={book.title}
                         className="img-fluid rounded shadow"
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/default-book.png";
+                        }}
                     />
 
                 </div>
@@ -125,6 +146,7 @@ function BorrowBook() {
             </div>
 
         </div>
+
     );
 }
 

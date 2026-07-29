@@ -5,19 +5,33 @@ import {
     rejectBorrowRequest,
     returnBorrowRequest
 } from "../services/borrowService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminBorrowRequests() {
 
     const [requests, setRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     async function fetchRequests() {
+
         try {
+
             const data = await getBorrowRequests();
+
             setRequests(data);
+
         }
         catch (error) {
+
             console.error(error);
+
         }
+        finally {
+
+            setLoading(false);
+
+        }
+
     }
 
     useEffect(() => {
@@ -25,46 +39,76 @@ function AdminBorrowRequests() {
     }, []);
 
     async function handleApprove(id) {
+
         try {
+
             await approveBorrowRequest(id);
+
             await fetchRequests();
+
         }
         catch (error) {
+
             console.error(error);
+
             alert(
                 error.response?.data?.message ??
                 "Failed to approve request."
             );
+
         }
+
     }
 
     async function handleReject(id) {
+
         try {
+
             await rejectBorrowRequest(id);
+
             await fetchRequests();
+
         }
         catch (error) {
+
             console.error(error);
+
             alert(
                 error.response?.data?.message ??
                 "Failed to reject request."
             );
+
         }
+
     }
 
     async function handleReturn(id) {
-    try {
-        await returnBorrowRequest(id);
-        await fetchRequests();
+
+        try {
+
+            await returnBorrowRequest(id);
+
+            await fetchRequests();
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.response?.data?.message ??
+                "Failed to return book."
+            );
+
+        }
+
     }
-    catch (error) {
-        console.error(error);
-        alert(
-            error.response?.data?.message ??
-            "Failed to return book."
+
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading borrow requests..." />
         );
     }
-}
 
     return (
 
@@ -113,21 +157,22 @@ function AdminBorrowRequests() {
                             <td>
 
                                 <span
-                                    className={`badge ${request.status === "Approved"
+                                    className={`badge ${
+                                        request.status === "Approved"
                                             ? "bg-success"
                                             : request.status === "Rejected"
                                                 ? "bg-danger"
                                                 : request.status === "Returned"
                                                     ? "bg-secondary"
                                                     : "bg-warning text-dark"
-                                        }`}
+                                    }`}
                                 >
                                     {request.status}
                                 </span>
 
                             </td>
 
-                           <td>
+                            <td>
 
                                 {request.status === "Pending" && (
 

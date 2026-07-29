@@ -1,25 +1,45 @@
 import { useEffect, useState } from "react";
 import { getMyBorrowRequests } from "../services/borrowService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function BorrowRequests() {
 
     const [requests, setRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
         async function fetchRequests() {
+
             try {
+
                 const data = await getMyBorrowRequests();
+
                 setRequests(data);
+
             }
             catch (error) {
+
                 console.error(error);
+
             }
+            finally {
+
+                setLoading(false);
+
+            }
+
         }
 
         fetchRequests();
 
     }, []);
+
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading borrow requests..." />
+        );
+    }
 
     return (
 
@@ -61,14 +81,15 @@ function BorrowRequests() {
                             <td>
 
                                 <span
-                                    className={`badge ${request.status === "Approved"
+                                    className={`badge ${
+                                        request.status === "Approved"
                                             ? "bg-success"
                                             : request.status === "Rejected"
                                                 ? "bg-danger"
                                                 : request.status === "Returned"
                                                     ? "bg-secondary"
                                                     : "bg-warning text-dark"
-                                        }`}
+                                    }`}
                                 >
                                     {request.status}
                                 </span>
