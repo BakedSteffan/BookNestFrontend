@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getBookById, updateBook } from "../services/bookService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function EditBook() {
 
     const { id } = useParams();
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(true);
 
     const [book, setBook] = useState({
         id: id,
@@ -32,7 +35,11 @@ function EditBook() {
             catch (error) {
 
                 console.error(error);
-                alert("Failed to load book.");
+
+            }
+            finally {
+
+                setLoading(false);
 
             }
 
@@ -75,6 +82,12 @@ function EditBook() {
 
         }
 
+    }
+
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading book..." />
+        );
     }
 
     return (
