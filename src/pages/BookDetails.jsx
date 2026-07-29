@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getBookById } from "../services/bookService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function BookDetails() {
 
@@ -26,9 +27,7 @@ function BookDetails() {
 
     if (!book) {
         return (
-            <div className="text-center py-5">
-                <h3>Loading book...</h3>
-            </div>
+            <LoadingSpinner text="Loading book..." />
         );
     }
 
@@ -47,11 +46,13 @@ function BookDetails() {
                             <div className="col-md-4">
 
                                 <img
-                                    src={book.coverImageUrl}
+                                    src={book.coverImageUrl || "/default-book.png"}
                                     alt={book.title}
                                     className="img-fluid rounded-start h-100"
-                                    style={{
-                                        objectFit: "cover"
+                                    style={{ objectFit: "cover" }}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "/default-book.png";
                                     }}
                                 />
 
