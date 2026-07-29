@@ -3,28 +3,45 @@ import { Link } from "react-router-dom";
 import { getBooks, deleteBook } from "../services/bookService";
 import "../styles/Books.css";
 import BookCard from "../components/BookCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function Books() {
 
     const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
     const role = localStorage.getItem("role");
 
     useEffect(() => {
+
         async function fetchBooks() {
+
             try {
+
                 const data = await getBooks();
+
                 console.log(data);
+
                 setBooks(data);
+
             }
             catch (error) {
+
                 console.error(error);
+
             }
+            finally {
+
+                setLoading(false);
+
+            }
+
         }
 
         fetchBooks();
+
     }, []);
 
     async function handleDelete(id) {
@@ -78,6 +95,12 @@ function Books() {
 
     });
 
+    if (loading) {
+        return (
+            <LoadingSpinner text="Loading books..." />
+        );
+    }
+
     return (
         <div className="container my-5">
 
@@ -121,7 +144,7 @@ function Books() {
                     className={`btn ${selectedCategory === "All"
                         ? "btn-dark"
                         : "btn-outline-dark"
-                        }`}
+                    }`}
                     onClick={() => setSelectedCategory("All")}
                 >
                     All
@@ -134,7 +157,7 @@ function Books() {
                         className={`btn ${selectedCategory === category
                             ? "btn-dark"
                             : "btn-outline-dark"
-                            }`}
+                        }`}
                         onClick={() => setSelectedCategory(category)}
                     >
                         {category}
