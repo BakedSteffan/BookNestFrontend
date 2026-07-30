@@ -14,7 +14,8 @@ function Hero() {
                     <div className="col-lg-6">
 
                         <span className="hero-badge">
-                            📚 Welcome to BookNest
+                            <i className="bi bi-book-half me-2"></i>
+                            Welcome to BookNest
                         </span>
 
                         <h1 className="hero-title">
