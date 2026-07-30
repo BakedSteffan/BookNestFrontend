@@ -1,6 +1,6 @@
 ﻿import { Link } from 'react-router-dom';
 import '../styles/Hero.css';
-//import heroImage from "../assets/images/hero.png";
+import heroImage from "../assets/images/hero-image.jpg";
 
 function Hero() {
     return (
@@ -42,9 +42,11 @@ function Hero() {
 
                     <div className="col-lg-6 text-center">
 
-                        <div className="hero-image-placeholder">
-                            Hero Image
-                        </div>
+                        <img
+                            src={heroImage}
+                            alt="BookNest Library"
+                            className="img-fluid hero-image"
+                        />
 
                     </div>
 
