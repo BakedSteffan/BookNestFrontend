@@ -3,7 +3,11 @@
     background: linear-gradient( 135deg, #f9f5ef 0%, #f4ede4 45%, #efe5d7 100% );
     position: relative;
     overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
 }
+
+    /* Decorative background glows */
 
     .hero::before {
         content: "";
@@ -31,10 +35,14 @@
         pointer-events: none;
     }
 
+    /* Keeps all content above the glow */
+
     .hero .container {
         position: relative;
         z-index: 1;
     }
+
+/* Badge */
 
 .hero-badge {
     display: inline-block;
@@ -44,7 +52,10 @@
     border-radius: 999px;
     margin-bottom: 25px;
     font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
+
+/* Title */
 
 .hero-title {
     font-size: 3.8rem;
@@ -53,6 +64,8 @@
     line-height: 1.15;
 }
 
+/* Description */
+
 .hero-description {
     font-size: 1.2rem;
     margin-bottom: 35px;
@@ -60,11 +73,14 @@
     color: #555;
 }
 
+/* Button */
+
 .btn-booknest {
     background-color: var(--primary-color);
     color: white;
-    padding: 14px 30px;
-    border-radius: 10px;
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
@@ -72,21 +88,26 @@
         background-color: var(--secondary-color);
         color: white;
         transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
     }
+
+/* Hero Image */
 
 .hero-image {
     width: 100%;
     max-width: 520px;
     border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    object-fit: contain;
-    transition: transform 0.3s ease;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
     .hero-image:hover {
         transform: scale(1.02);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
     }
 
+/* Placeholder (if ever used again) */
 
 .hero-image-placeholder {
     height: 450px;
@@ -98,6 +119,8 @@
     font-size: 2rem;
     color: var(--primary-color);
 }
+
+/* Responsive */
 
 @media (max-width: 992px) {
 
