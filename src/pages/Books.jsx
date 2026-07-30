@@ -109,19 +109,15 @@ function Books() {
 
             <div className="books-header shadow-sm rounded-4 p-4 mb-4">
 
-                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                <div className="text-center">
 
-                    <div>
+                    <h1 className="fw-bold mb-2">
+                        BookNest Library
+                    </h1>
 
-                        <h1 className="fw-bold mb-2">
-                            BookNest Library
-                        </h1>
-
-                        <p className="text-muted mb-0">
-                            Discover your next favorite book. Browse by category or search by title, author, or genre.
-                        </p>
-
-                    </div>
+                    <p className="text-muted mb-3">
+                        Discover your next favorite book. Browse by category or search by title, author, or genre.
+                    </p>
 
                     {role === "Admin" && (
 
