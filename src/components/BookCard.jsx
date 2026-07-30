@@ -14,11 +14,11 @@ function BookCard({
     return (
         <div className="col-lg-4 col-md-6 mb-4">
 
-            <div className="card h-100 shadow-sm border-0">
+            <div className="card h-100 shadow-sm border-0 book-card">
 
                 <img
                     src={image || "/default-book.png"}
-                    className="card-img-top"
+                    className="card-img-top book-cover"
                     alt={title}
                     onError={(e) => {
                         e.target.onerror = null;

@@ -102,93 +102,141 @@ function Books() {
     }
 
     return (
+
         <div className="container my-5">
 
-            <div className="books-header">
+            {/* Header */}
 
-                <div className="d-flex justify-content-between align-items-center">
+            <div className="books-header shadow-sm rounded-4 p-4 mb-4">
+
+                <div className="d-flex justify-content-between align-items-center flex-wrap">
 
                     <div>
-                        <h1>Browse Books</h1>
 
-                        <p>
-                            Discover your next favorite book.
+                        <h1 className="fw-bold mb-2">
+                            BookNest Library
+                        </h1>
+
+                        <p className="text-muted mb-0">
+                            Discover your next favorite book. Browse by category or search by title, author, or genre.
                         </p>
+
                     </div>
 
                     {role === "Admin" && (
+
                         <Link
                             to="/books/add"
-                            className="btn btn-success"
+                            className="btn btn-success px-4"
                         >
                             <i className="bi bi-plus-circle me-2"></i>
                             Add Book
                         </Link>
+
                     )}
 
                 </div>
 
             </div>
 
-            <input
-                type="text"
-                className="form-control search-box"
-                placeholder="Search by title, author or category..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            {/* Search + Categories */}
 
-            <div className="category-buttons">
+            <div className="card shadow-sm border-0 rounded-4 mb-4">
 
-                <button
-                    className={`btn ${selectedCategory === "All"
-                        ? "btn-dark"
-                        : "btn-outline-dark"
-                    }`}
-                    onClick={() => setSelectedCategory("All")}
-                >
-                    All
-                </button>
+                <div className="card-body">
 
-                {categories.map(category => (
+                    <div className="input-group">
 
-                    <button
-                        key={category}
-                        className={`btn ${selectedCategory === category
-                            ? "btn-dark"
-                            : "btn-outline-dark"
-                        }`}
-                        onClick={() => setSelectedCategory(category)}
-                    >
-                        {category}
-                    </button>
+                        <span className="input-group-text bg-white border-end-0">
+                            <i className="bi bi-search"></i>
+                        </span>
 
-                ))}
+                        <input
+                            type="text"
+                            className="form-control border-start-0"
+                            placeholder="Search books, authors or categories..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+
+                    </div>
+
+                    <div className="category-buttons mt-4">
+
+                        <button
+                            className={`btn ${selectedCategory === "All"
+                                ? "btn-dark"
+                                : "btn-outline-dark"
+                                }`}
+                            onClick={() => setSelectedCategory("All")}
+                        >
+                            All
+                        </button>
+
+                        {categories.map(category => (
+
+                            <button
+                                key={category}
+                                className={`btn ${selectedCategory === category
+                                    ? "btn-dark"
+                                    : "btn-outline-dark"
+                                    }`}
+                                onClick={() => setSelectedCategory(category)}
+                            >
+                                {category}
+                            </button>
+
+                        ))}
+
+                    </div>
+
+                </div>
 
             </div>
 
+            {/* Books */}
+
             <div className="row">
 
-                {filteredBooks.map(book => (
+                {filteredBooks.length > 0 ? (
 
-                    <BookCard
-                        key={book.id}
-                        id={book.id}
-                        title={book.title}
-                        author={book.author}
-                        category={book.category}
-                        year={book.publicationYear}
-                        image={book.coverImageUrl}
-                        isAvailable={book.isAvailable}
-                        isAdmin={role === "Admin"}
-                        onDelete={handleDelete}
-                    />
+                    filteredBooks.map(book => (
 
-                ))}
+                        <BookCard
+                            key={book.id}
+                            id={book.id}
+                            title={book.title}
+                            author={book.author}
+                            category={book.category}
+                            year={book.publicationYear}
+                            image={book.coverImageUrl}
+                            isAvailable={book.isAvailable}
+                            isAdmin={role === "Admin"}
+                            onDelete={handleDelete}
+                        />
+
+                    ))
+
+                ) : (
+
+                    <div className="col-12 text-center py-5">
+
+                        <h4 className="text-muted">
+                            No books found
+                        </h4>
+
+                        <p className="text-secondary mb-0">
+                            Try changing your search or category filter.
+                        </p>
+
+                    </div>
+
+                )}
 
             </div>
 
         </div>
+
     );
 }
 

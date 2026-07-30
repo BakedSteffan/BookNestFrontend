@@ -21,3 +21,61 @@
     gap: 10px;
     margin-bottom: 40px;
 }
+
+.book-card {
+    overflow: hidden;
+    border-radius: 16px;
+    transition: all .25s ease;
+}
+
+    .book-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 1rem 2rem rgba(0,0,0,.18) !important;
+    }
+
+.book-cover {
+    height: 320px;
+    object-fit: cover;
+    transition: transform .35s ease;
+}
+
+.book-card:hover .book-cover {
+    transform: scale(1.05);
+}
+
+.book-card .card-body {
+    padding: 1.4rem;
+}
+
+.book-card .badge {
+    width: fit-content;
+    font-size: .85rem;
+}
+
+.book-card .btn {
+    border-radius: 10px;
+}
+
+.books-header {
+    background: white;
+    border: 1px solid #ececec;
+}
+
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+    .category-buttons .btn {
+        border-radius: 999px;
+        padding: .45rem 1rem;
+    }
+
+.input-group-text {
+    border-radius: 12px 0 0 12px;
+}
+
+.form-control {
+    border-radius: 0 12px 12px 0;
+}
