@@ -12,6 +12,10 @@ function Books() {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const booksPerPage = 9;
+
     const role = localStorage.getItem("role");
 
     useEffect(() => {
@@ -21,9 +25,6 @@ function Books() {
             try {
 
                 const data = await getBooks();
-
-                console.log(data);
-
                 setBooks(data);
 
             }
@@ -50,9 +51,7 @@ function Books() {
             "Are you sure you want to delete this book?"
         );
 
-        if (!confirmed) {
-            return;
-        }
+        if (!confirmed) return;
 
         try {
 
@@ -94,6 +93,19 @@ function Books() {
         return matchesCategory && matchesSearch;
 
     });
+
+    
+
+    // Pagination
+    const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+
+    const indexOfLastBook = currentPage * booksPerPage;
+    const indexOfFirstBook = indexOfLastBook - booksPerPage;
+
+    const currentBooks = filteredBooks.slice(
+        indexOfFirstBook,
+        indexOfLastBook
+    );
 
     if (loading) {
         return (
@@ -177,7 +189,10 @@ function Books() {
                                     ? "btn-dark"
                                     : "btn-outline-dark"
                                     }`}
-                                onClick={() => setSelectedCategory(category)}
+                                onClick={() => {
+                                    setSelectedCategory(category);
+                                    setCurrentPage(1);
+                                }}
                             >
                                 {category}
                             </button>
@@ -194,9 +209,9 @@ function Books() {
 
             <div className="row">
 
-                {filteredBooks.length > 0 ? (
+                {currentBooks.length > 0 ? (
 
-                    filteredBooks.map(book => (
+                    currentBooks.map(book => (
 
                         <BookCard
                             key={book.id}
@@ -230,6 +245,48 @@ function Books() {
                 )}
 
             </div>
+
+            {/* Pagination */}
+
+            {totalPages > 1 && (
+                <nav className="mt-5">
+                    <ul className="pagination justify-content-center">
+
+                        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                            <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                            >
+                                Previous
+                            </button>
+                        </li>
+
+                        {[...Array(totalPages)].map((_, index) => (
+                            <li
+                                key={index}
+                                className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+                            >
+                                <button
+                                    className="page-link"
+                                    onClick={() => setCurrentPage(index + 1)}
+                                >
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+
+                        <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                            <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                            >
+                                Next
+                            </button>
+                        </li>
+
+                    </ul>
+                </nav>
+            )}
 
         </div>
 
