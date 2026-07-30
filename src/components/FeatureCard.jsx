@@ -1,21 +1,33 @@
-function FeatureCard({ icon, title, description }) {
-    return (
-        <div className="col-md-4 mb-4">
-            <div className="card h-100 shadow-sm border-0 text-center p-4">
+import "../styles/FeatureCard.css";
 
-                <div className="display-4 mb-3">
-                    {icon}
+function FeatureCard({ icon, title, description }) {
+
+    return (
+
+        <div className="col-md-4">
+
+            <div className="feature-card text-center h-100">
+
+                <div className="feature-icon">
+
+                    <i className={icon}></i>
+
                 </div>
 
-                <h4>{title}</h4>
+                <h4 className="mt-4 mb-3">
+                    {title}
+                </h4>
 
-                <p>
+                <p className="text-muted mb-0">
                     {description}
                 </p>
 
             </div>
+
         </div>
+
     );
+
 }
 
 export default FeatureCard;

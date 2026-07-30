@@ -2,30 +2,38 @@
 
 function FeatureSection() {
     return (
-        <section className="container my-5">
+        <section className="container py-5">
 
-            <h2 className="text-center mb-5">
-                Why Choose BookNest?
-            </h2>
+            <div className="text-center mb-5">
 
-            <div className="row">
+                <h2 className="fw-bold">
+                    Why Choose BookNest?
+                </h2>
+
+                <p className="text-muted mt-3">
+                    Everything you need for a modern and seamless digital library experience.
+                </p>
+
+            </div>
+
+            <div className="row g-4">
 
                 <FeatureCard
-                    icon="📚"
-                    title="Easy Borrowing"
-                    description="Borrow books quickly with a simple and intuitive process."
+                    icon="bi bi-book-half"
+                    title="Borrow with Ease"
+                    description="Borrow books quickly through a simple and intuitive process designed for students."
                 />
 
                 <FeatureCard
-                    icon="⚡"
-                    title="Fast & Modern"
-                    description="Enjoy a clean and responsive library experience."
+                    icon="bi bi-lightning-charge-fill"
+                    title="Modern Experience"
+                    description="Enjoy a fast, responsive interface built with today's web technologies."
                 />
 
                 <FeatureCard
-                    icon="👥"
-                    title="Student & Librarian Friendly"
-                    description="Designed for both students and librarians to manage books efficiently."
+                    icon="bi bi-people-fill"
+                    title="Built for Everyone"
+                    description="Designed for students and librarians to efficiently manage books and borrowing."
                 />
 
             </div>
