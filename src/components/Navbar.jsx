@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 
 function Navbar() {
@@ -22,10 +22,10 @@ function Navbar() {
 
             <div className="container">
 
-                <Link className="navbar-brand" to="/">
+                <NavLink className="navbar-brand" to="/">
                     <i className="bi bi-book-half me-2"></i>
                     BookNest
-                </Link>
+                </NavLink>
 
                 <button
                     className="navbar-toggler"
@@ -41,45 +41,70 @@ function Navbar() {
                     <ul className="navbar-nav me-auto">
 
                         <li className="nav-item">
-                            <Link className="nav-link" to="/">
+                            <NavLink
+                                to="/"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active" : "nav-link"
+                                }
+                            >
+                                <i className="bi bi-house-door me-1"></i>
                                 Home
-                            </Link>
+                            </NavLink>
                         </li>
 
                         <li className="nav-item">
-                            <Link className="nav-link" to="/books">
+                            <NavLink
+                                to="/books"
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active" : "nav-link"
+                                }
+                            >
+                                <i className="bi bi-journal-bookmark me-1"></i>
                                 Books
-                            </Link>
+                            </NavLink>
                         </li>
 
                         {token && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="/borrow-requests">
+                                <NavLink
+                                    to="/borrow-requests"
+                                    className={({ isActive }) =>
+                                        isActive ? "nav-link active" : "nav-link"
+                                    }
+                                >
+                                    <i className="bi bi-clipboard-check me-1"></i>
                                     My Requests
-                                </Link>
+                                </NavLink>
+                            </li>
+                        )}
+
+                        {token && (
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/borrow-history"
+                                    className={({ isActive }) =>
+                                        isActive ? "nav-link active" : "nav-link"
+                                    }
+                                >
+                                    <i className="bi bi-clock-history me-1"></i>
+                                    {role === "Admin" ? "Borrow History" : "My History"}
+                                </NavLink>
                             </li>
                         )}
 
                         {role === "Admin" && (
-                            <>
-                                <li className="nav-item">
-                                    <Link
-                                        className="nav-link"
-                                        to="/admin/borrow-requests"
-                                    >
-                                        Admin Requests
-                                    </Link>
-                                </li>
-
-                                <li className="nav-item">
-                                    <Link
-                                        className="nav-link"
-                                        to="/borrow-history"
-                                    >
-                                        Borrow History
-                                    </Link>
-                                </li>
-                            </>
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/admin/borrow-requests"
+                                    className={({ isActive }) =>
+                                        isActive ? "nav-link active" : "nav-link"
+                                    }
+                                >
+                                    <i className="bi bi-shield-lock me-1"></i>
+                                    Admin Requests
+                                </NavLink>
+                            </li>
                         )}
 
                     </ul>
@@ -87,22 +112,24 @@ function Navbar() {
                     {token ? (
                         <div className="d-flex align-items-center gap-3">
 
-                            <span className="navbar-username fw-semibold">
-                                Hello, {username}
+                            <span className="navbar-username">
+                                <i className="bi bi-person-circle me-2"></i>
+                                {username}
                             </span>
 
                             <button
                                 className="btn login-btn"
                                 onClick={handleLogout}
                             >
+                                <i className="bi bi-box-arrow-right me-2"></i>
                                 Logout
                             </button>
 
                         </div>
                     ) : (
-                        <Link className="btn login-btn" to="/login">
+                        <NavLink className="btn login-btn" to="/login">
                             Login
-                        </Link>
+                        </NavLink>
                     )}
 
                 </div>
