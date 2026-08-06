@@ -1,12 +1,12 @@
-import { Routes, Route } from 'react-router-dom';
-import Footer from './components/Footer';
+import { Routes, Route } from "react-router-dom";
+import Footer from "./components/Footer";
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Books from './pages/Books';
-import Navbar from './components/Navbar';
-import BorrowRequests from './pages/BorrowRequests';
-import BorrowHistory from './pages/BorrowHistory';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Books from "./pages/Books";
+import Navbar from "./components/Navbar";
+import BorrowRequests from "./pages/BorrowRequests";
+import BorrowHistory from "./pages/BorrowHistory";
 import Register from "./pages/Register";
 import BookDetails from "./pages/BookDetails";
 import BorrowBook from "./pages/BorrowBook";
@@ -17,101 +17,105 @@ import EditBook from "./pages/EditBook";
 
 function App() {
     return (
-        <>
+        <div className="d-flex flex-column min-vh-100">
+
             <Navbar />
 
-            <main className="container my-5">
+            <main className="container my-5 flex-grow-1">
+
                 <Routes>
 
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
 
-    <Route
-        path="/"
-        element={
-            <ProtectedRoute>
-                <Home />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute>
+                                <Home />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/books"
-        element={
-            <ProtectedRoute>
-                <Books />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/books"
+                        element={
+                            <ProtectedRoute>
+                                <Books />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/books/:id"
-        element={
-            <ProtectedRoute>
-                <BookDetails />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/books/:id"
+                        element={
+                            <ProtectedRoute>
+                                <BookDetails />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/borrow/:id"
-        element={
-            <ProtectedRoute>
-                <BorrowBook />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/borrow/:id"
+                        element={
+                            <ProtectedRoute>
+                                <BorrowBook />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/borrow-requests"
-        element={
-            <ProtectedRoute>
-                <BorrowRequests />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/borrow-requests"
+                        element={
+                            <ProtectedRoute>
+                                <BorrowRequests />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/borrow-history"
-        element={
-            <ProtectedRoute>
-                <BorrowHistory />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/borrow-history"
+                        element={
+                            <ProtectedRoute>
+                                <BorrowHistory />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/admin/borrow-requests"
-        element={
-            <ProtectedRoute adminOnly={true}>
-                <AdminBorrowRequests />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/admin/borrow-requests"
+                        element={
+                            <ProtectedRoute adminOnly={true}>
+                                <AdminBorrowRequests />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-        path="/books/add"
-        element={
-            <ProtectedRoute roles={["Admin"]}>
-                <AddBook />
-            </ProtectedRoute>
-        }
-    />
+                    <Route
+                        path="/books/add"
+                        element={
+                            <ProtectedRoute roles={["Admin"]}>
+                                <AddBook />
+                            </ProtectedRoute>
+                        }
+                    />
 
-    <Route
-    path="/books/edit/:id"
-    element={
-        <ProtectedRoute roles={["Admin"]}>
-            <EditBook />
-        </ProtectedRoute>
-    }
-/>
+                    <Route
+                        path="/books/edit/:id"
+                        element={
+                            <ProtectedRoute roles={["Admin"]}>
+                                <EditBook />
+                            </ProtectedRoute>
+                        }
+                    />
 
-</Routes>
+                </Routes>
+
             </main>
 
             <Footer />
-        </>
+
+        </div>
     );
 }
 
