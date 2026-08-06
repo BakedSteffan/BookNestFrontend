@@ -3,6 +3,8 @@
     color: white;
     padding: 2rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* Gives breathing room before the footer */
+    margin-top: 3rem;
 }
 
 .footer-brand {

@@ -3,7 +3,7 @@ import "../styles/Footer.css";
 
 function Footer() {
     return (
-        <footer className="footer-booknest mt-auto">
+        <footer className="footer-booknest">
 
             <div className="container text-center">
 
@@ -18,26 +18,20 @@ function Footer() {
 
                 <div className="footer-links mb-3">
 
-                    <Link to="/">
-                        Home
-                    </Link>
+                    <Link to="/">Home</Link>
 
                     <span>•</span>
 
-                    <Link to="/books">
-                        Books
-                    </Link>
+                    <Link to="/books">Books</Link>
 
                     <span>•</span>
 
-                    <Link to="/borrow-requests">
-                        My Requests
-                    </Link>
+                    <Link to="/borrow-requests">My Requests</Link>
 
                 </div>
 
                 <small className="footer-copy">
-                     2026 BookNest. All rights reserved.
+                    © 2026 BookNest. All rights reserved.
                 </small>
 
             </div>
