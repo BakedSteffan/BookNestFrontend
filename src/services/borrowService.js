@@ -34,3 +34,8 @@ export async function getBorrowHistory() {
     const response = await api.get("/BorrowHistory");
     return response.data;
 }
+
+export async function getMyBorrowHistory() {
+    const response = await api.get("/BorrowHistory/my");
+    return response.data;
+}

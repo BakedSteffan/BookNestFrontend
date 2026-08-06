@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getBorrowHistory } from "../services/borrowService";
+import {
+    getBorrowHistory,
+    getMyBorrowHistory
+} from "../services/borrowService";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 function BorrowHistory() {
@@ -7,13 +10,22 @@ function BorrowHistory() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Get the user's role once
+    const role = localStorage.getItem("role");
+
     useEffect(() => {
 
         async function loadHistory() {
 
             try {
 
-                const data = await getBorrowHistory();
+                let data;
+
+                if (role === "Admin") {
+                    data = await getBorrowHistory();
+                } else {
+                    data = await getMyBorrowHistory();
+                }
 
                 setHistory(data);
 
@@ -33,7 +45,7 @@ function BorrowHistory() {
 
         loadHistory();
 
-    }, []);
+    }, [role]);
 
     if (loading) {
         return (
@@ -55,7 +67,9 @@ function BorrowHistory() {
 
                     <tr>
                         <th>ID</th>
-                        <th>Borrower</th>
+
+                        {role === "Admin" && <th>Borrower</th>}
+
                         <th>Book</th>
                         <th>Borrow Date</th>
                         <th>Return Date</th>
@@ -71,7 +85,9 @@ function BorrowHistory() {
 
                             <td>{item.id}</td>
 
-                            <td>{item.borrowerName}</td>
+                            {role === "Admin" && (
+                                <td>{item.borrowerName}</td>
+                            )}
 
                             <td>{item.bookTitle}</td>
 
@@ -80,7 +96,9 @@ function BorrowHistory() {
                             </td>
 
                             <td>
-                                {new Date(item.returnDate).toLocaleDateString()}
+                                {item.returnDate
+                                    ? new Date(item.returnDate).toLocaleDateString()
+                                    : "Not Returned"}
                             </td>
 
                         </tr>
