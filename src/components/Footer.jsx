@@ -31,7 +31,7 @@ function Footer() {
                 </div>
 
                 <small className="footer-copy">
-                    © 2026 BookNest. All rights reserved.
+                     2026 BookNest. All rights reserved.
                 </small>
 
             </div>
