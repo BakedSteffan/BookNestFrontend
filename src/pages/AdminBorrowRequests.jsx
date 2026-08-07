@@ -17,7 +17,6 @@ function AdminBorrowRequests() {
         try {
 
             const data = await getBorrowRequests();
-
             setRequests(data);
 
         }
@@ -43,7 +42,6 @@ function AdminBorrowRequests() {
         try {
 
             await approveBorrowRequest(id);
-
             await fetchRequests();
 
         }
@@ -65,7 +63,6 @@ function AdminBorrowRequests() {
         try {
 
             await rejectBorrowRequest(id);
-
             await fetchRequests();
 
         }
@@ -87,7 +84,6 @@ function AdminBorrowRequests() {
         try {
 
             await returnBorrowRequest(id);
-
             await fetchRequests();
 
         }
@@ -114,108 +110,196 @@ function AdminBorrowRequests() {
 
         <div className="container my-5">
 
-            <h2 className="mb-4">
-                Borrow Requests
-            </h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-            <table className="table table-striped align-middle">
+                <div>
 
-                <thead>
+                    <h2 className="fw-bold mb-1">
+                        <i className="bi bi-shield-lock me-2"></i>
+                        Admin Borrow Requests
+                    </h2>
 
-                    <tr>
-                        <th>Request ID</th>
-                        <th>Borrower</th>
-                        <th>Book</th>
-                        <th>Borrow Date</th>
-                        <th>Expected Return</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                    <p className="text-muted mb-0">
+                        Review, approve, reject, and return borrowed books.
+                    </p>
 
-                </thead>
+                </div>
 
-                <tbody>
+                <div className="card shadow-sm border-0">
 
-                    {requests.map(request => (
+                    <div className="card-body text-center px-4 py-3">
 
-                        <tr key={request.id}>
+                        <h4 className="fw-bold mb-0">
+                            {requests.length}
+                        </h4>
 
-                            <td>{request.id}</td>
+                        <small className="text-muted">
+                            Request{requests.length !== 1 && "s"}
+                        </small>
 
-                            <td>{request.borrowerName}</td>
+                    </div>
 
-                            <td>{request.bookTitle}</td>
+                </div>
 
-                            <td>
-                                {new Date(request.borrowDate).toLocaleDateString()}
-                            </td>
+            </div>
 
-                            <td>
-                                {new Date(request.expectedReturnDate).toLocaleDateString()}
-                            </td>
+            <div className="card shadow-sm border-0">
 
-                            <td>
+                <div className="card-body p-0">
 
-                                <span
-                                    className={`badge ${
-                                        request.status === "Approved"
-                                            ? "bg-success"
-                                            : request.status === "Rejected"
-                                                ? "bg-danger"
-                                                : request.status === "Returned"
-                                                    ? "bg-secondary"
-                                                    : "bg-warning text-dark"
-                                    }`}
-                                >
-                                    {request.status}
-                                </span>
+                    {requests.length === 0 ? (
 
-                            </td>
+                        <div className="text-center py-5">
 
-                            <td>
+                            <i
+                                className="bi bi-journal-x display-4 text-secondary"
+                            ></i>
 
-                                {request.status === "Pending" && (
+                            <h5 className="mt-3">
+                                No borrow requests
+                            </h5>
 
-                                    <div className="d-flex gap-2">
+                            <p className="text-muted mb-0">
+                                There are currently no borrow requests.
+                            </p>
 
-                                        <button
-                                            className="btn btn-success btn-sm"
-                                            onClick={() => handleApprove(request.id)}
-                                        >
-                                            Approve
-                                        </button>
+                        </div>
 
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => handleReject(request.id)}
-                                        >
-                                            Reject
-                                        </button>
+                    ) : (
 
-                                    </div>
+                        <div className="table-responsive">
 
-                                )}
+                            <table className="table table-hover align-middle mb-0">
 
-                                {request.status === "Approved" && (
+                                <thead className="table-dark">
 
-                                    <button
-                                        className="btn btn-primary btn-sm"
-                                        onClick={() => handleReturn(request.id)}
-                                    >
-                                        Return
-                                    </button>
+                                    <tr>
 
-                                )}
+                                        <th>ID</th>
+                                        <th>Borrower</th>
+                                        <th>Book</th>
+                                        <th>Borrow Date</th>
+                                        <th>Expected Return</th>
+                                        <th>Status</th>
+                                        <th className="text-center">
+                                            Actions
+                                        </th>
 
-                            </td>
+                                    </tr>
 
-                        </tr>
+                                </thead>
 
-                    ))}
+                                <tbody>
 
-                </tbody>
+                                    {requests.map(request => (
 
-            </table>
+                                        <tr key={request.id}>
+
+                                            <td>
+                                                <strong>#{request.id}</strong>
+                                            </td>
+
+                                            <td>
+                                                {request.borrowerName}
+                                            </td>
+
+                                            <td className="fw-semibold">
+                                                {request.bookTitle}
+                                            </td>
+
+                                            <td>
+                                                {new Date(
+                                                    request.borrowDate
+                                                ).toLocaleDateString()}
+                                            </td>
+
+                                            <td>
+                                                {new Date(
+                                                    request.expectedReturnDate
+                                                ).toLocaleDateString()}
+                                            </td>
+
+                                            <td>
+
+                                                <span
+                                                    className={`badge ${request.status === "Approved"
+                                                            ? "bg-success"
+                                                            : request.status === "Rejected"
+                                                                ? "bg-danger"
+                                                                : request.status === "Returned"
+                                                                    ? "bg-secondary"
+                                                                    : "bg-warning text-dark"
+                                                        }`}
+                                                >
+                                                    {request.status}
+                                                </span>
+
+                                            </td>
+
+                                            <td className="text-center">
+
+                                                {request.status === "Pending" && (
+
+                                                    <div className="d-flex justify-content-center gap-2">
+
+                                                        <button
+                                                            className="btn btn-success btn-sm"
+                                                            onClick={() => handleApprove(request.id)}
+                                                        >
+                                                            <i className="bi bi-check-lg me-1"></i>
+                                                            Approve
+                                                        </button>
+
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => handleReject(request.id)}
+                                                        >
+                                                            <i className="bi bi-x-lg me-1"></i>
+                                                            Reject
+                                                        </button>
+
+                                                    </div>
+
+                                                )}
+
+                                                {request.status === "Approved" && (
+
+                                                    <button
+                                                        className="btn btn-primary btn-sm"
+                                                        onClick={() => handleReturn(request.id)}
+                                                    >
+                                                        <i className="bi bi-arrow-return-left me-1"></i>
+                                                        Return
+                                                    </button>
+
+                                                )}
+
+                                                {(request.status === "Returned" ||
+                                                    request.status === "Rejected") && (
+
+                                                        <span className="text-muted">
+                                                            —
+                                                        </span>
+
+                                                    )}
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )}
+
+                </div>
+
+            </div>
 
         </div>
 
