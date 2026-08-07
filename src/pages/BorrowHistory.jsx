@@ -10,7 +10,6 @@ function BorrowHistory() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Get the user's role once
     const role = localStorage.getItem("role");
 
     useEffect(() => {
@@ -57,61 +56,152 @@ function BorrowHistory() {
 
         <div className="container my-5">
 
-            <h2 className="mb-4">
-                Borrow History
-            </h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-            <table className="table table-striped align-middle">
+                <div>
+                    <h2 className="fw-bold mb-1">
+                        <i className="bi bi-clock-history me-2"></i>
+                        {role === "Admin"
+                            ? "Borrow History"
+                            : "My Borrow History"}
+                    </h2>
 
-                <thead>
+                    <p className="text-muted mb-0">
+                        {role === "Admin"
+                            ? "View all borrowing records."
+                            : "View your borrowing history."}
+                    </p>
+                </div>
 
-                    <tr>
-                        <th>ID</th>
+                <div className="card shadow-sm border-0">
+                    <div className="card-body text-center px-4 py-3">
+                        <h4 className="fw-bold mb-0">
+                            {history.length}
+                        </h4>
+                        <small className="text-muted">
+                            Record{history.length !== 1 && "s"}
+                        </small>
+                    </div>
+                </div>
 
-                        {role === "Admin" && <th>Borrower</th>}
+            </div>
 
-                        <th>Book</th>
-                        <th>Borrow Date</th>
-                        <th>Return Date</th>
-                    </tr>
+            <div className="card shadow-sm border-0">
 
-                </thead>
+                <div className="card-body p-0">
 
-                <tbody>
+                    {history.length === 0 ? (
 
-                    {history.map(item => (
+                        <div className="text-center py-5">
 
-                        <tr key={item.id}>
+                            <i
+                                className="bi bi-journal-x display-4 text-secondary"
+                            ></i>
 
-                            <td>{item.id}</td>
+                            <h5 className="mt-3">
+                                No borrow history found
+                            </h5>
 
-                            {role === "Admin" && (
-                                <td>{item.borrowerName}</td>
-                            )}
+                            <p className="text-muted mb-0">
+                                There are no records to display.
+                            </p>
 
-                            <td>{item.bookTitle}</td>
+                        </div>
 
-                            <td>
-                                {new Date(item.borrowDate).toLocaleDateString()}
-                            </td>
+                    ) : (
 
-                            <td>
-                                {item.returnDate
-                                    ? new Date(item.returnDate).toLocaleDateString()
-                                    : "Not Returned"}
-                            </td>
+                        <div className="table-responsive">
 
-                        </tr>
+                            <table className="table table-hover align-middle mb-0">
 
-                    ))}
+                                <thead className="table-dark">
 
-                </tbody>
+                                    <tr>
 
-            </table>
+                                        <th>ID</th>
+
+                                        {role === "Admin" && (
+                                            <th>Borrower</th>
+                                        )}
+
+                                        <th>Book</th>
+                                        <th>Borrow Date</th>
+                                        <th>Return Status</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    {history.map(item => (
+
+                                        <tr key={item.id}>
+
+                                            <td>
+                                                <strong>#{item.id}</strong>
+                                            </td>
+
+                                            {role === "Admin" && (
+                                                <td>{item.borrowerName}</td>
+                                            )}
+
+                                            <td className="fw-semibold">
+                                                {item.bookTitle}
+                                            </td>
+
+                                            <td>
+                                                {new Date(
+                                                    item.borrowDate
+                                                ).toLocaleDateString()}
+                                            </td>
+
+                                            <td>
+
+                                                {item.returnDate ? (
+
+                                                    <>
+                                                        <span className="badge bg-success me-2">
+                                                            Returned
+                                                        </span>
+
+                                                        <small className="text-muted">
+                                                            {new Date(
+                                                                item.returnDate
+                                                            ).toLocaleDateString()}
+                                                        </small>
+                                                    </>
+
+                                                ) : (
+
+                                                    <span className="badge bg-warning text-dark">
+                                                        Not Returned
+                                                    </span>
+
+                                                )}
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    )}
+
+                </div>
+
+            </div>
 
         </div>
 
     );
+
 }
 
 export default BorrowHistory;
