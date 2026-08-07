@@ -44,25 +44,55 @@ function BorrowRequests() {
 
         <div className="container my-5">
 
-            <div className="card shadow-sm border-0 rounded-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                <div className="card-body p-4">
+                <div>
 
-                    <h2 className="mb-4">
+                    <h2 className="fw-bold mb-1">
+                        <i className="bi bi-clipboard-check me-2"></i>
                         My Borrow Requests
                     </h2>
 
+                    <p className="text-muted mb-0">
+                        Track the status of your borrowing requests.
+                    </p>
+
+                </div>
+
+                <div className="card shadow-sm border-0">
+
+                    <div className="card-body text-center px-4 py-3">
+
+                        <h4 className="fw-bold mb-0">
+                            {requests.length}
+                        </h4>
+
+                        <small className="text-muted">
+                            Request{requests.length !== 1 && "s"}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="card shadow-sm border-0">
+
+                <div className="card-body p-0">
+
                     {requests.length === 0 ? (
 
-                        <div className="text-center text-muted py-5">
+                        <div className="text-center py-5">
 
-                            <i
-                                className="bi bi-journal-x"
-                                style={{ fontSize: "3rem" }}
-                            ></i>
+                            <i className="bi bi-journal-x display-4 text-secondary"></i>
 
-                            <p className="mt-3 mb-0">
-                                You haven't made any borrow requests yet.
+                            <h5 className="mt-3">
+                                No borrow requests found
+                            </h5>
+
+                            <p className="text-muted mb-0">
+                                You haven't submitted any borrow requests yet.
                             </p>
 
                         </div>
@@ -73,13 +103,15 @@ function BorrowRequests() {
 
                             <table className="table table-hover align-middle mb-0">
 
-                                <thead className="table-light">
+                                <thead className="table-dark">
 
                                     <tr>
+
                                         <th>Book</th>
                                         <th>Borrow Date</th>
                                         <th>Expected Return</th>
                                         <th>Status</th>
+
                                     </tr>
 
                                 </thead>
@@ -95,27 +127,42 @@ function BorrowRequests() {
                                             </td>
 
                                             <td>
-                                                {new Date(request.borrowDate).toLocaleDateString()}
+                                                {new Date(
+                                                    request.borrowDate
+                                                ).toLocaleDateString()}
                                             </td>
 
                                             <td>
-                                                {new Date(request.expectedReturnDate).toLocaleDateString()}
+                                                {new Date(
+                                                    request.expectedReturnDate
+                                                ).toLocaleDateString()}
                                             </td>
 
                                             <td>
 
-                                                <span
-                                                    className={`badge rounded-pill px-3 py-2 ${request.status === "Approved"
-                                                            ? "bg-success"
-                                                            : request.status === "Rejected"
-                                                                ? "bg-danger"
-                                                                : request.status === "Returned"
-                                                                    ? "bg-secondary"
-                                                                    : "bg-warning text-dark"
-                                                        }`}
-                                                >
-                                                    {request.status}
-                                                </span>
+                                                {request.status === "Approved" && (
+                                                    <span className="badge bg-success">
+                                                        Approved
+                                                    </span>
+                                                )}
+
+                                                {request.status === "Pending" && (
+                                                    <span className="badge bg-warning text-dark">
+                                                        Pending
+                                                    </span>
+                                                )}
+
+                                                {request.status === "Rejected" && (
+                                                    <span className="badge bg-danger">
+                                                        Rejected
+                                                    </span>
+                                                )}
+
+                                                {request.status === "Returned" && (
+                                                    <span className="badge bg-secondary">
+                                                        Returned
+                                                    </span>
+                                                )}
 
                                             </td>
 
