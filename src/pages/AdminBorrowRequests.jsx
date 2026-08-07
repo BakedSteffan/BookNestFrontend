@@ -174,17 +174,13 @@ function AdminBorrowRequests() {
                                 <thead className="table-dark">
 
                                     <tr>
-
                                         <th>ID</th>
                                         <th>Borrower</th>
                                         <th>Book</th>
                                         <th>Borrow Date</th>
                                         <th>Expected Return</th>
                                         <th>Status</th>
-                                        <th className="text-center">
-                                            Actions
-                                        </th>
-
+                                        <th className="text-center">Actions</th>
                                     </tr>
 
                                 </thead>
@@ -199,24 +195,18 @@ function AdminBorrowRequests() {
                                                 <strong>#{request.id}</strong>
                                             </td>
 
-                                            <td>
-                                                {request.borrowerName}
-                                            </td>
+                                            <td>{request.borrowerName}</td>
 
                                             <td className="fw-semibold">
                                                 {request.bookTitle}
                                             </td>
 
                                             <td>
-                                                {new Date(
-                                                    request.borrowDate
-                                                ).toLocaleDateString()}
+                                                {new Date(request.borrowDate).toLocaleDateString()}
                                             </td>
 
                                             <td>
-                                                {new Date(
-                                                    request.expectedReturnDate
-                                                ).toLocaleDateString()}
+                                                {new Date(request.expectedReturnDate).toLocaleDateString()}
                                             </td>
 
                                             <td>
@@ -278,7 +268,7 @@ function AdminBorrowRequests() {
                                                     request.status === "Rejected") && (
 
                                                         <span className="text-muted">
-                                                            —
+                                                            N/A
                                                         </span>
 
                                                     )}
