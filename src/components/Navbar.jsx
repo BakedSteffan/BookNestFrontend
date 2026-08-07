@@ -40,57 +40,57 @@ function Navbar() {
 
                     <ul className="navbar-nav me-auto">
 
-                        <li className="nav-item">
-                            <NavLink
-                                to="/"
-                                end
-                                className={({ isActive }) =>
-                                    isActive ? "nav-link active" : "nav-link"
-                                }
-                            >
-                                <i className="bi bi-house-door me-1"></i>
-                                Home
-                            </NavLink>
-                        </li>
-
-                        <li className="nav-item">
-                            <NavLink
-                                to="/books"
-                                className={({ isActive }) =>
-                                    isActive ? "nav-link active" : "nav-link"
-                                }
-                            >
-                                <i className="bi bi-journal-bookmark me-1"></i>
-                                Books
-                            </NavLink>
-                        </li>
-
                         {token && (
-                            <li className="nav-item">
-                                <NavLink
-                                    to="/borrow-requests"
-                                    className={({ isActive }) =>
-                                        isActive ? "nav-link active" : "nav-link"
-                                    }
-                                >
-                                    <i className="bi bi-clipboard-check me-1"></i>
-                                    My Requests
-                                </NavLink>
-                            </li>
-                        )}
+                            <>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/"
+                                        end
+                                        className={({ isActive }) =>
+                                            isActive ? "nav-link active" : "nav-link"
+                                        }
+                                    >
+                                        <i className="bi bi-house-door me-1"></i>
+                                        Home
+                                    </NavLink>
+                                </li>
 
-                        {token && (
-                            <li className="nav-item">
-                                <NavLink
-                                    to="/borrow-history"
-                                    className={({ isActive }) =>
-                                        isActive ? "nav-link active" : "nav-link"
-                                    }
-                                >
-                                    <i className="bi bi-clock-history me-1"></i>
-                                    {role === "Admin" ? "Borrow History" : "My History"}
-                                </NavLink>
-                            </li>
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/books"
+                                        className={({ isActive }) =>
+                                            isActive ? "nav-link active" : "nav-link"
+                                        }
+                                    >
+                                        <i className="bi bi-journal-bookmark me-1"></i>
+                                        Books
+                                    </NavLink>
+                                </li>
+
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/borrow-requests"
+                                        className={({ isActive }) =>
+                                            isActive ? "nav-link active" : "nav-link"
+                                        }
+                                    >
+                                        <i className="bi bi-clipboard-check me-1"></i>
+                                        My Requests
+                                    </NavLink>
+                                </li>
+
+                                <li className="nav-item">
+                                    <NavLink
+                                        to="/borrow-history"
+                                        className={({ isActive }) =>
+                                            isActive ? "nav-link active" : "nav-link"
+                                        }
+                                    >
+                                        <i className="bi bi-clock-history me-1"></i>
+                                        {role === "Admin" ? "Borrow History" : "My History"}
+                                    </NavLink>
+                                </li>
+                            </>
                         )}
 
                         {role === "Admin" && (
@@ -127,9 +127,17 @@ function Navbar() {
 
                         </div>
                     ) : (
-                        <NavLink className="btn login-btn" to="/login">
-                            Login
-                        </NavLink>
+                        <div className="d-flex gap-2">
+
+                            <NavLink className="btn login-btn" to="/login">
+                                Login
+                            </NavLink>
+
+                            <NavLink className="btn btn-outline-light" to="/register">
+                                Register
+                            </NavLink>
+
+                        </div>
                     )}
 
                 </div>
