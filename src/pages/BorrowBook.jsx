@@ -13,6 +13,9 @@ function BorrowBook() {
     const [loading, setLoading] = useState(true);
     const [expectedReturnDate, setExpectedReturnDate] = useState("");
 
+    // Calculate today's date in YYYY-MM-DD format for input validation
+    const today = new Date().toISOString().split('T')[0];
+
     useEffect(() => {
 
         async function fetchBook() {
@@ -42,6 +45,12 @@ function BorrowBook() {
     }, [id]);
 
     const handleBorrow = async () => {
+
+        // Extra client-side validation check before API call
+        if (expectedReturnDate < today) {
+            alert("Expected return date cannot be in the past.");
+            return;
+        }
 
         try {
 
@@ -128,6 +137,7 @@ function BorrowBook() {
                             type="date"
                             className="form-control"
                             value={expectedReturnDate}
+                            min={today}
                             onChange={(e) => setExpectedReturnDate(e.target.value)}
                         />
 
