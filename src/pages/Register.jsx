@@ -22,6 +22,12 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        //Client-side validation to prevent sending weak passwords to the API early
+        if (form.password.length < 6) {
+            alert("Password must be at least 6 characters long.");
+            return;
+        }
+
         if (form.password !== form.confirmPassword) {
             alert("Passwords do not match.");
             return;
@@ -39,10 +45,22 @@ function Register() {
             navigate("/login");
         }
         catch (error) {
-            alert(
-                error.response?.data?.message ||
-                "Registration failed."
-            );
+            console.error(error);
+
+            //Parse ASP.NET Core automatic ModelState validation error structure
+            const validationErrors = error.response?.data?.errors;
+            let errorMessage; 
+
+            if (validationErrors) {
+                //Extract the first field name (e.g., "Password") and get its error message array
+                const firstKey = Object.keys(validationErrors)[0];
+                errorMessage = validationErrors[firstKey][0];
+            } else {
+                
+                errorMessage = error.response?.data?.message || "Registration failed.";
+            }
+
+            alert(errorMessage);
         }
     };
 
@@ -128,9 +146,10 @@ function Register() {
                                         type="password"
                                         name="password"
                                         className="form-control"
-                                        placeholder="Create a password"
+                                        placeholder="Create a password (min. 6 characters)"
                                         value={form.password}
                                         onChange={handleChange}
+                                        minLength={6}
                                         required
                                     />
 
@@ -149,6 +168,7 @@ function Register() {
                                         placeholder="Confirm your password"
                                         value={form.confirmPassword}
                                         onChange={handleChange}
+                                        minLength={6}
                                         required
                                     />
 
