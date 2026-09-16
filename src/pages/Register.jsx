@@ -22,7 +22,7 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        //Client-side validation to prevent sending weak passwords to the API early
+        // Client-side validation: Prevents short passwords from hitting the API early
         if (form.password.length < 6) {
             alert("Password must be at least 6 characters long.");
             return;
@@ -47,16 +47,14 @@ function Register() {
         catch (error) {
             console.error(error);
 
-            //Parse ASP.NET Core automatic ModelState validation error structure
+            // Extracts ASP.NET Core automatic ModelState validation errors
             const validationErrors = error.response?.data?.errors;
-            let errorMessage; 
+            let errorMessage;
 
             if (validationErrors) {
-                //Extract the first field name (e.g., "Password") and get its error message array
                 const firstKey = Object.keys(validationErrors)[0];
                 errorMessage = validationErrors[firstKey][0];
             } else {
-                
                 errorMessage = error.response?.data?.message || "Registration failed.";
             }
 
@@ -146,12 +144,17 @@ function Register() {
                                         type="password"
                                         name="password"
                                         className="form-control"
-                                        placeholder="Create a password (min. 6 characters)"
+                                        placeholder="Enter password"
                                         value={form.password}
                                         onChange={handleChange}
                                         minLength={6}
                                         required
                                     />
+                                    {/* FEATURE ADDITION: Visible helper text below input informing new users of the rule before submitting */}
+                                    <div className="form-text text-muted mt-1">
+                                        <i className="bi bi-info-circle me-1"></i>
+                                        Password must be at least 6 characters long.
+                                    </div>
 
                                 </div>
 
