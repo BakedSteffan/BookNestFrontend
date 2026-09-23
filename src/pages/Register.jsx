@@ -150,7 +150,7 @@ function Register() {
                                         minLength={6}
                                         required
                                     />
-                                    {/* FEATURE ADDITION: Visible helper text below input informing new users of the rule before submitting */}
+
                                     <div className="form-text text-muted mt-1">
                                         <i className="bi bi-info-circle me-1"></i>
                                         Password must be at least 6 characters long.
@@ -171,7 +171,7 @@ function Register() {
                                         placeholder="Confirm your password"
                                         value={form.confirmPassword}
                                         onChange={handleChange}
-                                        minLength={6} /* FEATURE ADDITION: prevents submitting input under 6 characters 
+                                        minLength={6}
                                         required
                                     />
 
