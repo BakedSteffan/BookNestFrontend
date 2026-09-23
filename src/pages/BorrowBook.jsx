@@ -137,7 +137,7 @@ function BorrowBook() {
                             type="date"
                             className="form-control"
                             value={expectedReturnDate}
-                            min={today}
+                            min={today} // restricts the UI calender picker
                             onChange={(e) => setExpectedReturnDate(e.target.value)}
                         />
 

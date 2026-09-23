@@ -171,7 +171,7 @@ function Register() {
                                         placeholder="Confirm your password"
                                         value={form.confirmPassword}
                                         onChange={handleChange}
-                                        minLength={6}
+                                        minLength={6} /* FEATURE ADDITION: prevents submitting input under 6 characters 
                                         required
                                     />
 

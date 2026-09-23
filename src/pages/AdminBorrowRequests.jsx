@@ -12,6 +12,15 @@ function AdminBorrowRequests() {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // State for managing the confirmation modal
+    const [modalConfig, setModalConfig] = useState({
+        isOpen: false,
+        requestId: null,
+        actionType: null, // 'approve' | 'reject'
+        bookTitle: "",
+        borrowerName: ""
+    });
+
     async function fetchRequests() {
 
         try {
@@ -34,8 +43,55 @@ function AdminBorrowRequests() {
     }
 
     useEffect(() => {
-        fetchRequests();
+        let active = true;
+
+        const loadData = async () => {
+            if (active) {
+                await fetchRequests();
+            }
+        };
+
+        loadData();
+
+        return () => {
+            active = false;
+        };
     }, []);
+
+    // Open confirmation modal instead of triggering immediately
+    function openConfirmationModal(request, actionType) {
+        setModalConfig({
+            isOpen: true,
+            requestId: request.id,
+            actionType: actionType,
+            bookTitle: request.bookTitle,
+            borrowerName: request.borrowerName
+        });
+    }
+
+    // Close modal and clear state
+    function closeModal() {
+        setModalConfig({
+            isOpen: false,
+            requestId: null,
+            actionType: null,
+            bookTitle: "",
+            borrowerName: ""
+        });
+    }
+
+    // Triggered upon confirming action inside the modal
+    async function handleConfirmModalAction() {
+        const { requestId, actionType } = modalConfig;
+
+        if (actionType === 'approve') {
+            await handleApprove(requestId);
+        } else if (actionType === 'reject') {
+            await handleReject(requestId);
+        }
+
+        closeModal();
+    }
 
     async function handleApprove(id) {
 
@@ -213,12 +269,12 @@ function AdminBorrowRequests() {
 
                                                 <span
                                                     className={`badge ${request.status === "Approved"
-                                                            ? "bg-success"
-                                                            : request.status === "Rejected"
-                                                                ? "bg-danger"
-                                                                : request.status === "Returned"
-                                                                    ? "bg-secondary"
-                                                                    : "bg-warning text-dark"
+                                                        ? "bg-success"
+                                                        : request.status === "Rejected"
+                                                            ? "bg-danger"
+                                                            : request.status === "Returned"
+                                                                ? "bg-secondary"
+                                                                : "bg-warning text-dark"
                                                         }`}
                                                 >
                                                     {request.status}
@@ -234,7 +290,7 @@ function AdminBorrowRequests() {
 
                                                         <button
                                                             className="btn btn-success btn-sm"
-                                                            onClick={() => handleApprove(request.id)}
+                                                            onClick={() => openConfirmationModal(request, 'approve')}
                                                         >
                                                             <i className="bi bi-check-lg me-1"></i>
                                                             Approve
@@ -242,7 +298,7 @@ function AdminBorrowRequests() {
 
                                                         <button
                                                             className="btn btn-danger btn-sm"
-                                                            onClick={() => handleReject(request.id)}
+                                                            onClick={() => openConfirmationModal(request, 'reject')}
                                                         >
                                                             <i className="bi bi-x-lg me-1"></i>
                                                             Reject
@@ -290,6 +346,52 @@ function AdminBorrowRequests() {
                 </div>
 
             </div>
+
+            {/* Confirmation Modal */}
+            {modalConfig.isOpen && (
+                <div
+                    className="modal fade show d-block"
+                    tabIndex="-1"
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                >
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content border-0 shadow">
+                            <div className="modal-header">
+                                <h5 className="modal-header-title fw-bold m-0">
+                                    <i className={`bi ${modalConfig.actionType === 'approve' ? 'bi-check-circle text-success' : 'bi-exclamation-triangle text-danger'} me-2`}></i>
+                                    Confirm Action
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={closeModal}
+                                ></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <p className="mb-0">
+                                    Are you sure you want to <strong>{modalConfig.actionType}</strong> the borrow request for <strong>"{modalConfig.bookTitle}"</strong> by <strong>{modalConfig.borrowerName}</strong>?
+                                </p>
+                            </div>
+                            <div className="modal-footer border-0">
+                                <button
+                                    type="button"
+                                    className="btn btn-light"
+                                    onClick={closeModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`btn ${modalConfig.actionType === 'approve' ? 'btn-success' : 'btn-danger'}`}
+                                    onClick={handleConfirmModalAction}
+                                >
+                                    Confirm {modalConfig.actionType === 'approve' ? 'Approval' : 'Rejection'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
 
