@@ -12,6 +12,13 @@ function Books() {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
 
+    // State for Delete Confirmation Modal
+    const [deleteModalConfig, setDeleteModalConfig] = useState({
+        isOpen: false,
+        bookId: null,
+        bookTitle: ""
+    });
+
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const booksPerPage = 9;
@@ -19,39 +26,55 @@ function Books() {
     const role = localStorage.getItem("role");
 
     useEffect(() => {
+        let active = true;
 
         async function fetchBooks() {
-
             try {
-
                 const data = await getBooks();
-                setBooks(data);
-
+                if (active) {
+                    setBooks(data);
+                }
             }
             catch (error) {
-
                 console.error(error);
-
             }
             finally {
-
-                setLoading(false);
-
+                if (active) {
+                    setLoading(false);
+                }
             }
-
         }
 
         fetchBooks();
 
+        return () => {
+            active = false;
+        };
     }, []);
 
-    async function handleDelete(id) {
+    // Triggered when "Delete" button on a BookCard is clicked
+    function openDeleteModal(id) {
+        const bookToDelete = books.find(b => b.id === id);
+        setDeleteModalConfig({
+            isOpen: true,
+            bookId: id,
+            bookTitle: bookToDelete ? bookToDelete.title : "this book"
+        });
+    }
 
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this book?"
-        );
+    // Close modal and clear state
+    function closeDeleteModal() {
+        setDeleteModalConfig({
+            isOpen: false,
+            bookId: null,
+            bookTitle: ""
+        });
+    }
 
-        if (!confirmed) return;
+    // Executes the deletion after user confirms in the modal
+    async function confirmDelete() {
+        const id = deleteModalConfig.bookId;
+        if (!id) return;
 
         try {
 
@@ -61,7 +84,7 @@ function Books() {
                 currentBooks.filter(book => book.id !== id)
             );
 
-            alert("Book deleted successfully!");
+            closeDeleteModal();
 
         }
         catch (error) {
@@ -72,6 +95,8 @@ function Books() {
                 error.response?.data ||
                 "Failed to delete book."
             );
+
+            closeDeleteModal();
 
         }
 
@@ -93,8 +118,6 @@ function Books() {
         return matchesCategory && matchesSearch;
 
     });
-
-    
 
     // Pagination
     const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
@@ -223,7 +246,7 @@ function Books() {
                             image={book.coverImageUrl}
                             isAvailable={book.isAvailable}
                             isAdmin={role === "Admin"}
-                            onDelete={handleDelete}
+                            onDelete={openDeleteModal}
                         />
 
                     ))
@@ -286,6 +309,53 @@ function Books() {
 
                     </ul>
                 </nav>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {deleteModalConfig.isOpen && (
+                <div
+                    className="modal fade show d-block"
+                    tabIndex="-1"
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                >
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content border-0 shadow">
+                            <div className="modal-header">
+                                <h5 className="modal-title fw-bold text-danger m-0">
+                                    <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                    Confirm Book Deletion
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={closeDeleteModal}
+                                ></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <p className="mb-0">
+                                    Are you sure you want to permanently delete <strong>"{deleteModalConfig.bookTitle}"</strong>? This action cannot be undone.
+                                </p>
+                            </div>
+                            <div className="modal-footer border-0">
+                                <button
+                                    type="button"
+                                    className="btn btn-light"
+                                    onClick={closeDeleteModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={confirmDelete}
+                                >
+                                    <i className="bi bi-trash me-1"></i>
+                                    Delete Book
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             )}
 
         </div>
