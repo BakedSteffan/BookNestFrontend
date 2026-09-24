@@ -9,6 +9,7 @@ function BorrowHistory() {
 
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedRecord, setSelectedRecord] = useState(null);
 
     const role = localStorage.getItem("role");
 
@@ -46,6 +47,31 @@ function BorrowHistory() {
 
     }, [role]);
 
+    const handleRowClick = (record) => {
+        setSelectedRecord(record);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedRecord(null);
+    };
+
+    // Helper to calculate expected return date (defaults to 14 days after borrow date if not provided by backend)
+    const getExpectedReturnDate = (record) => {
+        if (!record) return "N/A";
+        if (record.expectedReturnDate) {
+            return new Date(record.expectedReturnDate).toLocaleDateString();
+        }
+        if (record.dueDate) {
+            return new Date(record.dueDate).toLocaleDateString();
+        }
+        if (record.borrowDate) {
+            const borrow = new Date(record.borrowDate);
+            borrow.setDate(borrow.getDate() + 14);
+            return borrow.toLocaleDateString();
+        }
+        return "N/A";
+    };
+
     if (loading) {
         return (
             <LoadingSpinner text="Loading borrow history..." />
@@ -68,8 +94,8 @@ function BorrowHistory() {
 
                     <p className="text-muted mb-0">
                         {role === "Admin"
-                            ? "View all borrowing records."
-                            : "View your borrowing history."}
+                            ? "View all borrowing records. Click a record to view details."
+                            : "View your borrowing history. Click a record to view details."}
                     </p>
                 </div>
 
@@ -127,6 +153,7 @@ function BorrowHistory() {
                                         <th>Book</th>
                                         <th>Borrow Date</th>
                                         <th>Return Status</th>
+                                        <th className="text-end pe-4">Action</th>
 
                                     </tr>
 
@@ -136,14 +163,19 @@ function BorrowHistory() {
 
                                     {history.map(item => (
 
-                                        <tr key={item.id}>
+                                        <tr
+                                            key={item.id}
+                                            onClick={() => handleRowClick(item)}
+                                            style={{ cursor: "pointer" }}
+                                            title="Click to view full details"
+                                        >
 
                                             <td>
                                                 <strong>#{item.id}</strong>
                                             </td>
 
                                             {role === "Admin" && (
-                                                <td>{item.borrowerName}</td>
+                                                <td>{item.borrowerName || item.userEmail || item.userName || "N/A"}</td>
                                             )}
 
                                             <td className="fw-semibold">
@@ -182,6 +214,18 @@ function BorrowHistory() {
 
                                             </td>
 
+                                            <td className="text-end pe-4">
+                                                <button
+                                                    className="btn btn-sm btn-outline-primary"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRowClick(item);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-eye me-1"></i> View Details
+                                                </button>
+                                            </td>
+
                                         </tr>
 
                                     ))}
@@ -197,6 +241,117 @@ function BorrowHistory() {
                 </div>
 
             </div>
+
+            {/* Details Modal */}
+            {selectedRecord && (
+                <div
+                    className="modal fade show d-block"
+                    tabIndex="-1"
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                    onClick={handleCloseModal}
+                >
+                    <div
+                        className="modal-dialog modal-dialog-centered"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="modal-content border-0 shadow rounded-4">
+
+                            <div className="modal-header border-0 pb-0">
+                                <h5 className="modal-title fw-bold">
+                                    <i className="bi bi-receipt me-2 text-primary"></i>
+                                    Borrowing Record #{selectedRecord.id}
+                                </h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={handleCloseModal}
+                                ></button>
+                            </div>
+
+                            <div className="modal-body py-4">
+
+                                <ul className="list-group list-group-flush">
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-book me-2"></i>Book
+                                        </span>
+                                        <span className="fw-bold text-end ms-3">
+                                            {selectedRecord.bookTitle}
+                                        </span>
+                                    </li>
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-person me-2"></i>Borrower
+                                        </span>
+                                        <span className="fw-bold">
+                                            {selectedRecord.borrowerName || selectedRecord.userEmail || selectedRecord.userName || "Current User"}
+                                        </span>
+                                    </li>
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-calendar-check me-2"></i>Borrow Date
+                                        </span>
+                                        <span className="fw-semibold">
+                                            {selectedRecord.borrowDate
+                                                ? new Date(selectedRecord.borrowDate).toLocaleDateString()
+                                                : "N/A"}
+                                        </span>
+                                    </li>
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-calendar-event me-2"></i>Expected Return Date
+                                        </span>
+                                        <span className="fw-semibold">
+                                            {getExpectedReturnDate(selectedRecord)}
+                                        </span>
+                                    </li>
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-calendar2-x me-2"></i>Actual Return Date
+                                        </span>
+                                        <span className="fw-semibold">
+                                            {selectedRecord.returnDate
+                                                ? new Date(selectedRecord.returnDate).toLocaleDateString()
+                                                : "Not Returned Yet"}
+                                        </span>
+                                    </li>
+
+                                    <li className="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        <span className="text-muted">
+                                            <i className="bi bi-info-circle me-2"></i>Return Status
+                                        </span>
+                                        <span>
+                                            {selectedRecord.returnDate ? (
+                                                <span className="badge bg-success">Returned</span>
+                                            ) : (
+                                                <span className="badge bg-warning text-dark">Active (Borrowed)</span>
+                                            )}
+                                        </span>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                            <div className="modal-footer border-0 pt-0">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary px-4"
+                                    onClick={handleCloseModal}
+                                >
+                                    Close
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
 
