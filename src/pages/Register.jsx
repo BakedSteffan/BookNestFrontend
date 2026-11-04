@@ -12,6 +12,10 @@ function Register() {
         confirmPassword: ""
     });
 
+    // Toggle states for password inputs
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -64,17 +68,12 @@ function Register() {
 
     return (
         <div className="container py-5">
-
             <div className="row justify-content-center">
-
                 <div className="col-lg-6 col-md-8">
-
                     <div className="card shadow border-0 rounded-4">
-
                         <div className="card-body p-5">
 
                             <div className="text-center mb-4">
-
                                 <i
                                     className="bi bi-person-plus-fill"
                                     style={{
@@ -93,17 +92,14 @@ function Register() {
                                 <p className="text-muted">
                                     Join BookNest and start borrowing books.
                                 </p>
-
                             </div>
 
                             <form onSubmit={handleSubmit}>
 
                                 <div className="mb-3">
-
                                     <label className="form-label">
                                         Username
                                     </label>
-
                                     <input
                                         type="text"
                                         name="username"
@@ -113,15 +109,12 @@ function Register() {
                                         onChange={handleChange}
                                         required
                                     />
-
                                 </div>
 
                                 <div className="mb-3">
-
                                     <label className="form-label">
                                         Email
                                     </label>
-
                                     <input
                                         type="email"
                                         name="email"
@@ -131,50 +124,62 @@ function Register() {
                                         onChange={handleChange}
                                         required
                                     />
-
                                 </div>
 
                                 <div className="mb-3">
-
                                     <label className="form-label">
                                         Password
                                     </label>
-
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        className="form-control"
-                                        placeholder="Enter password"
-                                        value={form.password}
-                                        onChange={handleChange}
-                                        minLength={6}
-                                        required
-                                    />
-
+                                    <div className="input-group">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            className="form-control"
+                                            placeholder="Enter password"
+                                            value={form.password}
+                                            onChange={handleChange}
+                                            minLength={6}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            aria-label="Toggle password visibility"
+                                        >
+                                            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                        </button>
+                                    </div>
                                     <div className="form-text text-muted mt-1">
                                         <i className="bi bi-info-circle me-1"></i>
                                         Password must be at least 6 characters long.
                                     </div>
-
                                 </div>
 
                                 <div className="mb-4">
-
                                     <label className="form-label">
                                         Confirm Password
                                     </label>
-
-                                    <input
-                                        type="password"
-                                        name="confirmPassword"
-                                        className="form-control"
-                                        placeholder="Confirm your password"
-                                        value={form.confirmPassword}
-                                        onChange={handleChange}
-                                        minLength={6}
-                                        required
-                                    />
-
+                                    <div className="input-group">
+                                        <input
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            name="confirmPassword"
+                                            className="form-control"
+                                            placeholder="Confirm your password"
+                                            value={form.confirmPassword}
+                                            onChange={handleChange}
+                                            minLength={6}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            aria-label="Toggle confirm password visibility"
+                                        >
+                                            <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button
@@ -193,13 +198,10 @@ function Register() {
                             <hr className="my-4" />
 
                             <div className="text-center">
-
                                 <span className="text-muted">
                                     Already have an account?
                                 </span>
-
                                 <br />
-
                                 <Link
                                     to="/login"
                                     className="text-decoration-none fw-semibold"
@@ -207,17 +209,12 @@ function Register() {
                                 >
                                     Login Here
                                 </Link>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     );
 }

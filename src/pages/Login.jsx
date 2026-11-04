@@ -10,6 +10,9 @@ function Login() {
         password: ""
     });
 
+    // Toggle state for password visibility
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleChange = (e) => {
         setForm({
             ...form,
@@ -43,17 +46,12 @@ function Login() {
 
     return (
         <div className="container py-5">
-
             <div className="row justify-content-center">
-
                 <div className="col-lg-5 col-md-7">
-
                     <div className="card shadow border-0 rounded-4">
-
                         <div className="card-body p-5">
 
                             <div className="text-center mb-4">
-
                                 <i
                                     className="bi bi-book-half"
                                     style={{
@@ -72,17 +70,14 @@ function Login() {
                                 <p className="text-muted">
                                     Sign in to continue to BookNest
                                 </p>
-
                             </div>
 
                             <form onSubmit={handleSubmit}>
 
                                 <div className="mb-3">
-
                                     <label className="form-label">
                                         Email
                                     </label>
-
                                     <input
                                         type="email"
                                         name="email"
@@ -92,25 +87,31 @@ function Login() {
                                         placeholder="Enter your email"
                                         required
                                     />
-
                                 </div>
 
                                 <div className="mb-4">
-
                                     <label className="form-label">
                                         Password
                                     </label>
-
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        className="form-control"
-                                        value={form.password}
-                                        onChange={handleChange}
-                                        placeholder="Enter your password"
-                                        required
-                                    />
-
+                                    <div className="input-group">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="password"
+                                            className="form-control"
+                                            value={form.password}
+                                            onChange={handleChange}
+                                            placeholder="Enter your password"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-secondary"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            aria-label="Toggle password visibility"
+                                        >
+                                            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button
@@ -129,13 +130,10 @@ function Login() {
                             <hr className="my-4" />
 
                             <div className="text-center">
-
                                 <span className="text-muted">
                                     Don't have an account?
                                 </span>
-
                                 <br />
-
                                 <Link
                                     to="/register"
                                     className="text-decoration-none fw-semibold"
@@ -143,17 +141,12 @@ function Login() {
                                 >
                                     Create an Account
                                 </Link>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     );
 }
