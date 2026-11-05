@@ -16,9 +16,14 @@ function AddBook() {
     });
 
     function handleChange(e) {
+        const { name, value } = e.target;
+
+        // Strip non-numeric characters if the input field is 'isbn'
+        const updatedValue = name === "isbn" ? value.replace(/\D/g, "") : value;
+
         setBook({
             ...book,
-            [e.target.name]: e.target.value
+            [name]: updatedValue
         });
     }
 
@@ -80,10 +85,13 @@ function AddBook() {
                 <div className="mb-3">
                     <label className="form-label">ISBN</label>
                     <input
+                        type="text"
+                        inputMode="numeric"
                         className="form-control"
                         name="isbn"
                         value={book.isbn}
                         onChange={handleChange}
+                        placeholder="Enter ISBN (numbers only)"
                         required
                     />
                 </div>
