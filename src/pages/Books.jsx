@@ -187,7 +187,10 @@ function Books() {
                             className="form-control border-start-0"
                             placeholder="Search books, authors or categories..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
                         />
 
                     </div>
@@ -199,7 +202,10 @@ function Books() {
                                 ? "btn-dark"
                                 : "btn-outline-dark"
                                 }`}
-                            onClick={() => setSelectedCategory("All")}
+                            onClick={() => {
+                                setSelectedCategory("All");
+                                setCurrentPage(1);
+                            }}
                         >
                             All
                         </button>
