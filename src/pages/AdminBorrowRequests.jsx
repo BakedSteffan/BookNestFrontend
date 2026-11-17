@@ -11,6 +11,11 @@ function AdminBorrowRequests() {
 
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [statusFilter, setStatusFilter] = useState("All");
+
+    // Pagination States
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     // State for managing the confirmation modal
     const [modalConfig, setModalConfig] = useState({
@@ -156,6 +161,59 @@ function AdminBorrowRequests() {
 
     }
 
+    // --- Status Filter Logic ---
+    const statusOptions = ["All", "Pending", "Approved", "Rejected", "Returned"];
+
+    const filteredRequests = requests.filter((request) =>
+        statusFilter === "All" ? true : request.status === statusFilter
+    );
+
+    const handleStatusFilterChange = (status) => {
+        setStatusFilter(status);
+        setCurrentPage(1);
+    };
+
+    // --- Pagination Logic ---
+    const totalItems = filteredRequests.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+    // Ensure currentPage doesn't go out of bounds on filter or itemsPerPage change
+    const validCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+
+    const indexOfLastItem = validCurrentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentRequests = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
+
+    const handlePageChange = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    };
+
+    // Generate pagination numbers array with ellipsis handling
+    const getPageNumbers = () => {
+        const pages = [];
+        const maxPagesToShow = 5;
+
+        if (totalPages <= maxPagesToShow) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            if (validCurrentPage <= 3) {
+                pages.push(1, 2, 3, 4, "...", totalPages);
+            } else if (validCurrentPage >= totalPages - 2) {
+                pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pages.push(1, "...", validCurrentPage - 1, validCurrentPage, validCurrentPage + 1, "...", totalPages);
+            }
+        }
+        return pages;
+    };
+
     if (loading) {
         return (
             <LoadingSpinner text="Loading borrow requests..." />
@@ -186,11 +244,11 @@ function AdminBorrowRequests() {
                     <div className="card-body text-center px-4 py-3">
 
                         <h4 className="fw-bold mb-0">
-                            {requests.length}
+                            {filteredRequests.length}
                         </h4>
 
                         <small className="text-muted">
-                            Request{requests.length !== 1 && "s"}
+                            Request{filteredRequests.length !== 1 && "s"}
                         </small>
 
                     </div>
@@ -199,11 +257,40 @@ function AdminBorrowRequests() {
 
             </div>
 
+            {/* Status Filter Buttons */}
+            <div className="d-flex flex-wrap gap-2 mb-3">
+                {statusOptions.map((status) => {
+                    const count = status === "All"
+                        ? requests.length
+                        : requests.filter((r) => r.status === status).length;
+
+                    return (
+                        <button
+                            key={status}
+                            type="button"
+                            className={`btn btn-sm ${statusFilter === status
+                                ? "btn-dark"
+                                : "btn-outline-dark"
+                                }`}
+                            onClick={() => handleStatusFilterChange(status)}
+                        >
+                            {status}
+                            <span className={`badge ms-2 ${statusFilter === status
+                                ? "bg-light text-dark"
+                                : "bg-secondary"
+                                }`}>
+                                {count}
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
+
             <div className="card shadow-sm border-0">
 
                 <div className="card-body p-0">
 
-                    {requests.length === 0 ? (
+                    {filteredRequests.length === 0 ? (
 
                         <div className="text-center py-5">
 
@@ -216,130 +303,203 @@ function AdminBorrowRequests() {
                             </h5>
 
                             <p className="text-muted mb-0">
-                                There are currently no borrow requests.
+                                {statusFilter === "All"
+                                    ? "There are currently no borrow requests."
+                                    : `There are currently no ${statusFilter.toLowerCase()} borrow requests.`}
                             </p>
 
                         </div>
 
                     ) : (
 
-                        <div className="table-responsive">
+                        <>
+                            <div className="table-responsive">
 
-                            <table className="table table-hover align-middle mb-0">
+                                <table className="table table-hover align-middle mb-0">
 
-                                <thead className="table-dark">
+                                    <thead className="table-dark">
 
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Borrower</th>
-                                        <th>Book</th>
-                                        <th>Borrow Date</th>
-                                        <th>Expected Return</th>
-                                        <th>Status</th>
-                                        <th className="text-center">Actions</th>
-                                    </tr>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Borrower</th>
+                                            <th>Book</th>
+                                            <th>Borrow Date</th>
+                                            <th>Expected Return</th>
+                                            <th>Status</th>
+                                            <th className="text-center">Actions</th>
+                                        </tr>
 
-                                </thead>
+                                    </thead>
 
-                                <tbody>
+                                    <tbody>
 
-                                    {requests.map(request => (
+                                        {currentRequests.map(request => (
 
-                                        <tr key={request.id}>
+                                            <tr key={request.id}>
 
-                                            <td>
-                                                <strong>#{request.id}</strong>
-                                            </td>
+                                                <td>
+                                                    <strong>#{request.id}</strong>
+                                                </td>
 
-                                            <td>{request.borrowerName}</td>
+                                                <td>{request.borrowerName}</td>
 
-                                            <td className="fw-semibold">
-                                                {request.bookTitle}
-                                            </td>
+                                                <td className="fw-semibold">
+                                                    {request.bookTitle}
+                                                </td>
 
-                                            <td>
-                                                {new Date(request.borrowDate).toLocaleDateString()}
-                                            </td>
+                                                <td>
+                                                    {new Date(request.borrowDate).toLocaleDateString()}
+                                                </td>
 
-                                            <td>
-                                                {new Date(request.expectedReturnDate).toLocaleDateString()}
-                                            </td>
+                                                <td>
+                                                    {new Date(request.expectedReturnDate).toLocaleDateString()}
+                                                </td>
 
-                                            <td>
+                                                <td>
 
-                                                <span
-                                                    className={`badge ${request.status === "Approved"
-                                                        ? "bg-success"
-                                                        : request.status === "Rejected"
-                                                            ? "bg-danger"
-                                                            : request.status === "Returned"
-                                                                ? "bg-secondary"
-                                                                : "bg-warning text-dark"
-                                                        }`}
-                                                >
-                                                    {request.status}
-                                                </span>
-
-                                            </td>
-
-                                            <td className="text-center">
-
-                                                {request.status === "Pending" && (
-
-                                                    <div className="d-flex justify-content-center gap-2">
-
-                                                        <button
-                                                            className="btn btn-success btn-sm"
-                                                            onClick={() => openConfirmationModal(request, 'approve')}
-                                                        >
-                                                            <i className="bi bi-check-lg me-1"></i>
-                                                            Approve
-                                                        </button>
-
-                                                        <button
-                                                            className="btn btn-danger btn-sm"
-                                                            onClick={() => openConfirmationModal(request, 'reject')}
-                                                        >
-                                                            <i className="bi bi-x-lg me-1"></i>
-                                                            Reject
-                                                        </button>
-
-                                                    </div>
-
-                                                )}
-
-                                                {request.status === "Approved" && (
-
-                                                    <button
-                                                        className="btn btn-primary btn-sm"
-                                                        onClick={() => handleReturn(request.id)}
+                                                    <span
+                                                        className={`badge ${request.status === "Approved"
+                                                            ? "bg-success"
+                                                            : request.status === "Rejected"
+                                                                ? "bg-danger"
+                                                                : request.status === "Returned"
+                                                                    ? "bg-secondary"
+                                                                    : "bg-warning text-dark"
+                                                            }`}
                                                     >
-                                                        <i className="bi bi-arrow-return-left me-1"></i>
-                                                        Return
-                                                    </button>
+                                                        {request.status}
+                                                    </span>
 
-                                                )}
+                                                </td>
 
-                                                {(request.status === "Returned" ||
-                                                    request.status === "Rejected") && (
+                                                <td className="text-center">
 
-                                                        <span className="text-muted">
-                                                            N/A
-                                                        </span>
+                                                    {request.status === "Pending" && (
+
+                                                        <div className="d-flex justify-content-center gap-2">
+
+                                                            <button
+                                                                className="btn btn-success btn-sm"
+                                                                onClick={() => openConfirmationModal(request, 'approve')}
+                                                            >
+                                                                <i className="bi bi-check-lg me-1"></i>
+                                                                Approve
+                                                            </button>
+
+                                                            <button
+                                                                className="btn btn-danger btn-sm"
+                                                                onClick={() => openConfirmationModal(request, 'reject')}
+                                                            >
+                                                                <i className="bi bi-x-lg me-1"></i>
+                                                                Reject
+                                                            </button>
+
+                                                        </div>
 
                                                     )}
 
-                                            </td>
+                                                    {request.status === "Approved" && (
 
-                                        </tr>
+                                                        <button
+                                                            className="btn btn-primary btn-sm"
+                                                            onClick={() => handleReturn(request.id)}
+                                                        >
+                                                            <i className="bi bi-arrow-return-left me-1"></i>
+                                                            Return
+                                                        </button>
 
-                                    ))}
+                                                    )}
 
-                                </tbody>
+                                                    {(request.status === "Returned" ||
+                                                        request.status === "Rejected") && (
 
-                            </table>
+                                                            <span className="text-muted">
+                                                                N/A
+                                                            </span>
 
-                        </div>
+                                                        )}
+
+                                                </td>
+
+                                            </tr>
+
+                                        ))}
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            {/* Integrated Pagination Footer */}
+                            <div className="card-footer bg-white border-0 py-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                                <div className="d-flex align-items-center">
+                                    <span className="text-muted me-2 small">Show</span>
+                                    <select
+                                        className="form-select form-select-sm"
+                                        value={itemsPerPage}
+                                        onChange={handleItemsPerPageChange}
+                                        style={{ width: "80px" }}
+                                    >
+                                        <option value={5}>5</option>
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                    <span className="text-muted ms-2 small">entries per page</span>
+                                </div>
+
+                                <div className="small text-muted">
+                                    Showing <span className="fw-semibold">{totalItems === 0 ? 0 : indexOfFirstItem + 1}</span> to{" "}
+                                    <span className="fw-semibold">{Math.min(indexOfLastItem, totalItems)}</span> of{" "}
+                                    <span className="fw-semibold">{totalItems}</span> request{totalItems !== 1 && "s"}
+                                </div>
+
+                                {totalPages > 1 && (
+                                    <nav aria-label="Table navigation">
+                                        <ul className="pagination pagination-sm mb-0">
+                                            <li className={`page-item ${validCurrentPage === 1 ? "disabled" : ""}`}>
+                                                <button
+                                                    className="page-item-link page-link"
+                                                    onClick={() => handlePageChange(validCurrentPage - 1)}
+                                                >
+                                                    <i className="bi bi-chevron-left"></i>
+                                                </button>
+                                            </li>
+
+                                            {getPageNumbers().map((page, index) =>
+                                                page === "..." ? (
+                                                    <li key={`ellipsis-${index}`} className="page-item disabled">
+                                                        <span className="page-link">...</span>
+                                                    </li>
+                                                ) : (
+                                                    <li
+                                                        key={page}
+                                                        className={`page-item ${validCurrentPage === page ? "active" : ""}`}
+                                                    >
+                                                        <button
+                                                            className="page-link"
+                                                            onClick={() => handlePageChange(page)}
+                                                        >
+                                                            {page}
+                                                        </button>
+                                                    </li>
+                                                )
+                                            )}
+
+                                            <li className={`page-item ${validCurrentPage === totalPages ? "disabled" : ""}`}>
+                                                <button
+                                                    className="page-link"
+                                                    onClick={() => handlePageChange(validCurrentPage + 1)}
+                                                >
+                                                    <i className="bi bi-chevron-right"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                )}
+                            </div>
+                        </>
 
                     )}
 
